@@ -1,0 +1,113 @@
+### 5. Test the Application Locally
+Start the application:
+```bash
+node app.js
+```
+Visit: `http://localhost:3000` to see the welcome page.
+
+-------------------
+
+### 6. Dockerize the Application
+Create a `Dockerfile` in the project root:
+
+
+####Build he Docker image:
+
+```bash
+docker build -t my-node-app .
+
+Run the Docker Container
+Start a container from the image and map the necessary port
+
+```bash
+docker run -d -p 3000:3000 --name my-node-app my-node-app:latest
+
+---------------------------------
+
+### 7. Build and Push Image to a Docker Registry (ECR)
+1. Authenticate Docker with ECR:
+```bash
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+```
+
+2. Create an ECR repository:
+```bash
+aws ecr create-repository --repository-name my-node-app
+```
+
+3.tag the Docker image:
+```bash
+docker tag my-node-app:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-node-app:latest
+```
+
+4. Push the image:
+```bash
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-node-app:latest
+```
+------------------------------------------
+
+### 8. Create a Kubernetes Manifest File
+
+-----------------------------------
+
+### 9. Create a Kubernetes Cluster Using `eksctl`
+Create a cluster:
+```bash
+eksctl create cluster \
+  --name eks-cluster \
+  --region $AWS_REGION \
+  --version 1.27 \
+  --nodegroup-name managed-node-group \
+  --node-type t3.medium \
+  --nodes 1 \
+  --nodes-min 1 \
+  --nodes-max 2 \
+  --managed
+
+```
+kubectl get nodes
+
+kubectl cluster-info
+
+----------------------------------------
+
+### 11. Deploy the Application onto the Kubernetes Cluster
+Apply the Kubernetes manifest:
+```bash
+kubectl apply -f kubernetes/deployment.yaml
+```
+
+Verify deployment:
+```bash
+kubectl get pods
+kubectl get svc
+kubectl get all
+kubectl get deployments
+kubectl describe deployment <deployment-name>
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+
+kubectl scale deployment <deployment-name> --replicas=3
+
+```
+
+----------------------------------------
+
+### 12. Test Your Deployed Application
+Copy the `EXTERNAL-IP` from the service:
+```bash
+kubectl get svc
+```
+Access the application in your browser using the `EXTERNAL-IP`.
+
+kubectl delete all --all
+kubectl delete -f kubernetes/deployment.yaml
+kubectl delete secret <secret-name>
+eksctl delete cluster --name eks-cluster
+
+
+---
+
+
+
+

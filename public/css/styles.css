@@ -1,0 +1,31 @@
+/* Custom Styles */
+body {
+    background-color: #f8f9fa; /* Light gray background */
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Ensures footer stays at the bottom */
+}
+
+h1 {
+    color: #007bff; /* Bootstrap primary color */
+}
+
+p {
+    color: #555;
+    font-size: 18px;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #007bff; /* Same as Bootstrap primary */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+}
+
